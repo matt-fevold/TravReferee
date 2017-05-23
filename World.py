@@ -1,6 +1,6 @@
 import random
 
-debugger = False
+debugger = True
 
 
 # returns roll
@@ -88,12 +88,24 @@ class World(object):
             self.list_of_bases = list_of_bases
             self.trade_codes = trade_codes
             self.travel_code = travel_code
-        else:
+        else:  # random generated world
             self.size = roll_dice(1, 10)
             self.starport_quality = ""
             self.atmosphere_type = check_bounded_value(roll_dice(2, 6, -7) + self.size, 0, 10)
             self.temperature = roll_dice(2, 6) + temperature_dice_modifier(self.atmosphere_type)
-            self.hydrographic_percentage = 0
+            if self.size in [0, 1]:
+                self.hydrographic_percentage = 0
+            else:
+                self.hydrographic_percentage = roll_dice(2, 6, self.size - 7)
+                if self.atmosphere_type in [0, 1, 10, 11, 12]:
+                    self.hydrographic_percentage -= 4
+                if self.atmosphere_type is not 13:  # if it is not dense atmosphere
+                    if self.temperature in [10, 11]:  # hot temp
+                        self.hydrographic_percentage -= 2
+                    if self.temperature >= 12:  # roasting temp
+                        self.hydrographic_percentage -= 6
+
+            self.hydrographic_percentage = check_bounded_value(self.hydrographic_percentage, 0, 10)
             self.population = 0
             self.government_type = 0
             self.law_level = 0
@@ -105,11 +117,8 @@ class World(object):
     def __str__(self):
         return "\nSize: " + str(self.size) \
                + "\nAtmosphere Type: " + str(self.atmosphere_type) \
-               + "\nTemperature: " + str(self.temperature)
-
-
-
-
+               + "\nTemperature: " + str(self.temperature) \
+               + "\nHydrographic Percentage: " + str(self.hydrographic_percentage)
 
 # temp testing code
 x = World()
