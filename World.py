@@ -4,10 +4,12 @@ debugger = True
 
 
 # returns roll
-def roll_dice(quantity, dice_type, modification=0):
+def roll_dice(quantity, dice_type, modification=0, print_message=""):
     total = 0
+
     if debugger:
-        print("\nrolling " + str(quantity) + "d" + str(dice_type) + " + " + str(modification))
+        print("\nRolling for: " + print_message)
+        print("rolling " + str(quantity) + "d" + str(dice_type) + " + " + str(modification))
     for i in range(quantity):
         roll = random.randint(0, dice_type)
         if debugger:
@@ -89,14 +91,14 @@ class World(object):
             self.trade_codes = trade_codes
             self.travel_code = travel_code
         else:  # random generated world
-            self.size = roll_dice(1, 10)
+            self.size = roll_dice(1, 10, 0, "size")
             self.starport_quality = ""
-            self.atmosphere_type = check_bounded_value(roll_dice(2, 6, -7) + self.size, 0, 10)
-            self.temperature = roll_dice(2, 6) + temperature_dice_modifier(self.atmosphere_type)
+            self.atmosphere_type = check_bounded_value(roll_dice(2, 6, -7, "atmosphere") + self.size, 0, 10)
+            self.temperature = roll_dice(2, 6, 0, "temperature") + temperature_dice_modifier(self.atmosphere_type)
             if self.size in [0, 1]:
                 self.hydrographic_percentage = 0
             else:
-                self.hydrographic_percentage = roll_dice(2, 6, self.size - 7)
+                self.hydrographic_percentage = roll_dice(2, 6, self.size - 7, "hydro %")
                 if self.atmosphere_type in [0, 1, 10, 11, 12]:
                     self.hydrographic_percentage -= 4
                 if self.atmosphere_type is not 13:  # if it is not dense atmosphere
@@ -106,10 +108,16 @@ class World(object):
                         self.hydrographic_percentage -= 6
 
             self.hydrographic_percentage = check_bounded_value(self.hydrographic_percentage, 0, 10)
-            self.population = check_bounded_value(roll_dice(2, 6, -2), 0, 12)
-            self.government_type = 0
-            self.law_level = 0
-            self.tech_level = 0
+            self.population = check_bounded_value(roll_dice(2, 6, -2, "population"), 0, 12)
+            if population is 0:
+                self.government_type = 0
+                self.law_level = 0
+                self.tech_level = 0
+            else:
+                self.government_type = check_bounded_value(roll_dice(2, 6, self.population - 7, "government type")
+                                                           , 0, 13)
+                self.law_level = 0
+                self.tech_level = 0
             self.list_of_bases = []
             self.trade_codes = []
             self.travel_code = ""
@@ -119,7 +127,8 @@ class World(object):
                + "\nAtmosphere Type: " + str(self.atmosphere_type) \
                + "\nTemperature: " + str(self.temperature) \
                + "\nHydrographic Percentage: " + str(self.hydrographic_percentage) \
-                + "\nPopulation: " + str(self.population) 
+               + "\nPopulation: " + str(self.population)\
+               + "\nGovernment Type: " + str(self.government_type)
 
 # temp testing code
 x = World()
