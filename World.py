@@ -106,7 +106,7 @@ class World(object):
                         self.hydrographic_percentage -= 6
 
             self.hydrographic_percentage = check_bounded_value(self.hydrographic_percentage, 0, 10)
-            self.population = 0
+            self.population = check_bounded_value(roll_dice(2, 6, -2), 0, 12)
             self.government_type = 0
             self.law_level = 0
             self.tech_level = 0
@@ -118,7 +118,8 @@ class World(object):
         return "\nSize: " + str(self.size) \
                + "\nAtmosphere Type: " + str(self.atmosphere_type) \
                + "\nTemperature: " + str(self.temperature) \
-               + "\nHydrographic Percentage: " + str(self.hydrographic_percentage)
+               + "\nHydrographic Percentage: " + str(self.hydrographic_percentage) \
+                + "\nPopulation: " + str(self.population) 
 
 # temp testing code
 x = World()
