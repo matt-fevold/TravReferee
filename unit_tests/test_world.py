@@ -47,3 +47,28 @@ class TestWorld(TestCase):
 
     def test_starport_quality(self):
         pass
+
+    def test_hydrographic_percentage(self):
+        pass
+
+    def test_population(self):
+        pass
+
+    def test_government_type(self):
+        pass
+
+    def test_law_level(self):
+        pass
+
+    def test_tech_level(self):
+        pass
+
+    def test_list_of_bases(self):
+        pass
+
+    def test_trade_codes(self):
+        pass
+
+    def test_travel_code(self):
+        pass
+    
