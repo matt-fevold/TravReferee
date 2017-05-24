@@ -46,10 +46,31 @@ class TestWorld(TestCase):
                 self.assertTrue(0 <= test_world.atmosphere_type <= 15)
 
     def test_starport_quality(self):
-        pass
+        """
+        starport can only be X, A, B, C, D
+        :return:
+        """
 
     def test_hydrographic_percentage(self):
-        pass
+        """
+        bounds are 0 - 10
+        :return:
+        """
+
+        test_world = World("Manual", 2, None, 0, 0, 1)
+        self.assertTrue(0 <= test_world.hydrographic_percentage <= 10)
+
+        test_world.hydrographic_percentage = -2
+        self.assertFalse(0 <= test_world.hydrographic_percentage <= 10)
+
+        test_world.hydrographic_percentage = 12
+        self.assertFalse(0 <= test_world.hydrographic_percentage <= 10)
+
+        for i in range(0, 100):
+            with self.subTest(i=i):
+                test_world = World()
+                self.assertTrue(0 <= test_world.hydrographic_percentage <= 10)
+
 
     def test_population(self):
         pass
@@ -71,4 +92,4 @@ class TestWorld(TestCase):
 
     def test_travel_code(self):
         pass
-    
+
