@@ -47,9 +47,32 @@ class TestWorld(TestCase):
 
     def test_starport_quality(self):
         """
-        starport can only be X, A, B, C, D
+        starport can only be X, A, B, C, D, E
         :return:
         """
+        test_world = World("Manual", 2, "X")
+        self.assertTrue(test_world.starport_quality in ["X"])
+
+        test_world.starport_quality = "A"
+        self.assertTrue(test_world.starport_quality in ["A"])
+
+        test_world.starport_quality = "B"
+        self.assertTrue(test_world.starport_quality in ["B"])
+
+        test_world.starport_quality = "C"
+        self.assertTrue(test_world.starport_quality in ["C"])
+
+        test_world.starport_quality = "D"
+        self.assertTrue(test_world.starport_quality in ["D"])
+
+        test_world.starport_quality = "E"
+        self.assertTrue(test_world.starport_quality in ["E"])
+
+        # test the random generation a lot
+        for i in range(0, 100):
+            with self.subTest(i=i):
+                test_world = World()
+                self.assertTrue(test_world.starport_quality in ["X", "A", "B", "C", "D", "E"])
 
     def test_hydrographic_percentage(self):
         """
