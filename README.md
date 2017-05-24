@@ -8,26 +8,26 @@ World.py - allows you to create randomly generated worlds without having to roll
 
 sample output:
 
-Size: 5
+Size: 0
 
-Atmosphere Type: 1
+Atmosphere Type: 0
 
 Temperature: 1007
 
 Hydrographic Percentage: 0
 
-Population: 0
+Population: 2
 
 Government Type: 0
 
-Law Level: 2
+Law Level: 1
 
-Tech Level: 13
+Tech Level: 12
 
-Trade Codes: Ht Lt
+Trade Codes: As Ht Lo Va
 
-Starport Quality: B
+Starport Quality: C
 
-Bases: naval scout tas
+Bases: pirate
 
 Travel Code: A
