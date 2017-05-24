@@ -147,6 +147,83 @@ def calculate_tech_level(starport_quality, size, atmosphere_type, hydrographic_p
     return roll_dice(1, 6, 0, "tech level") + dm
 
 
+def calculate_list_of_bases(starport_quality):
+    """
+    from page 178 calculates which bases exist according to starport quality level
+    very ugly code but that is the cleanest way I can think of, the graph is complex.
+    """
+    list_of_bases = []
+    if starport_quality in "A":
+        roll = roll_dice(2, 6)
+        if roll >= 8:
+            list_of_bases.append("naval")
+        roll = roll_dice(2, 6)
+        if roll >= 10:
+            list_of_bases.append("scout")
+        roll = roll_dice(2, 6)
+        if roll >= 8:
+            list_of_bases.append("research")
+        roll = roll_dice(2, 6)
+        if roll >= 4:
+            list_of_bases.append("tas")
+        roll = roll_dice(2, 6)
+        if roll >= 6:
+            list_of_bases.append("imperial_consulate")
+
+    if starport_quality in "B":
+        roll = roll_dice(2, 6)
+        if roll >= 8:
+            list_of_bases.append("naval")
+        roll = roll_dice(2, 6)
+        if roll >= 8:
+            list_of_bases.append("scout")
+        roll = roll_dice(2, 6)
+        if roll >= 10:
+            list_of_bases.append("research")
+        roll = roll_dice(2, 6)
+        if roll >= 6:
+            list_of_bases.append("tas")
+        roll = roll_dice(2, 6)
+        if roll >= 8:
+            list_of_bases.append("imperial_consulate")
+        roll = roll_dice(2, 6)
+        if roll >= 12:
+            list_of_bases.append("pirate")
+
+    if starport_quality in "C":
+        roll = roll_dice(2, 6)
+        if roll >= 8:
+            list_of_bases.append("scout")
+        roll = roll_dice(2, 6)
+        if roll >= 10:
+            list_of_bases.append("research")
+        roll = roll_dice(2, 6)
+        if roll >= 10:
+            list_of_bases.append("tas")
+        roll = roll_dice(2, 6)
+        if roll >= 10:
+            list_of_bases.append("imperial_consulate")
+        roll = roll_dice(2, 6)
+        if roll >= 10:
+            list_of_bases.append("pirate")
+
+    if starport_quality in "D":
+        roll = roll_dice(2, 6)
+        if roll >= 7:
+            list_of_bases.append("scout")
+        roll = roll_dice(2, 6)
+        if roll >= 12:
+            list_of_bases.append("pirate")
+
+    if starport_quality in "E":
+        roll = roll_dice(2, 6)
+        if roll >= 12:
+            list_of_bases.append("pirate")
+    if starport_quality in "X":
+        list_of_bases.append("")
+
+    return list_of_bases
+
 
 class World(object):
     def __init__(self, manual=None, size=None, starport_quality=None, atmosphere_type=None, temperature=None,
@@ -188,11 +265,15 @@ class World(object):
                 self.tech_level = calculate_tech_level(self.starport_quality, self.size, self.atmosphere_type,
                                                        self.hydrographic_percentage, self.population,
                                                        self.government_type)
-            self.list_of_bases = []
+            self.list_of_bases = calculate_list_of_bases(self.starport_quality)
             self.trade_codes = []
             self.travel_code = ""
 
     def __str__(self):
+        string_list_of_bases = ""
+        for i in range(len(self.list_of_bases)):
+            string_list_of_bases += self.list_of_bases[i] + " "
+
         return "\nSize: " + str(self.size) \
                + "\nAtmosphere Type: " + str(self.atmosphere_type) \
                + "\nTemperature: " + str(self.temperature) \
@@ -202,7 +283,8 @@ class World(object):
                + "\nLaw Level: " + str(self.law_level) \
                + "\nTech Level: " + str(self.tech_level) \
                + "\nTrade Codes: " + "NOT IMPLEMENTED YET" \
-               + "\nStarport Quality: " + self.starport_quality
+               + "\nStarport Quality: " + self.starport_quality \
+               + "\nBases: " + string_list_of_bases
 
 # temp testing code
 x = World()
