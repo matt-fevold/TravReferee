@@ -94,6 +94,8 @@ class TestWorld(TestCase):
                 test_world = World()
                 self.assertTrue(0 <= test_world.hydrographic_percentage <= 10)
 
+    def test_temperature(self):
+        pass
 
     def test_population(self):
         pass
