@@ -225,6 +225,89 @@ def calculate_list_of_bases(starport_quality):
     return list_of_bases
 
 
+def calculate_trade_codes(size, atmosphere_type, hydrographic_percentage, population, government_type,
+                          law_level, tech_level):
+    """
+    messy table on page 181
+    :param size:
+    :param atmosphere_type:
+    :param hydrographic_percentage:
+    :param population:
+    :param government_type:
+    :param law_level:
+    :param tech_level:
+    :return:
+    """
+    trade_codes = []
+
+    if (atmosphere_type in [4, 5, 6, 7, 8, 9]) and (hydrographic_percentage in [4, 5, 6, 7, 8])\
+            and (population in [5, 6, 7]):
+        trade_codes.append("Ag")
+
+    if (size == 0) and (atmosphere_type == 0) and (hydrographic_percentage == 0):
+        trade_codes.append("As")
+
+    if (population == 0) and (government_type == 0) and (law_level == 0):
+        trade_codes.append("Ba")
+
+    if (atmosphere_type >= 2) and (hydrographic_percentage == 0):
+        trade_codes.append("De")
+
+    if (atmosphere_type >= 10) and (hydrographic_percentage >= 1):
+        trade_codes.append("Fl")
+
+    if (size >= 5) and (atmosphere_type in [4, 5, 6, 7, 8, 9]) and (hydrographic_percentage in [4, 5, 6, 7, 8]):
+        trade_codes.append("Ga")
+
+    if population >= 9:
+        trade_codes.append("Hi")
+
+    if tech_level >= 12:
+        trade_codes.append("Ht")
+
+    if (atmosphere_type in [0, 1]) and (hydrographic_percentage >= 1):
+        trade_codes.append("IC")
+
+    if (atmosphere_type in [0, 1, 2, 4, 7, 9]) and (population >= 9):
+        trade_codes.append("In")
+
+    if population in [1, 2, 3]:
+        trade_codes.append("Lo")
+
+    if tech_level >= 5:
+        trade_codes.append("Lt")
+
+    if (atmosphere_type <= 3) and (hydrographic_percentage <= 3) and (population >= 6):
+        trade_codes.append("Na")
+
+    if population in [4, 5, 6]:
+        trade_codes.append("NI")
+
+    if (atmosphere_type in [2, 3, 4, 5]) and (hydrographic_percentage <= 3):
+        trade_codes.append("Po")
+
+    if (atmosphere_type in [6, 8]) and (population in [6, 7, 8]):
+        trade_codes.append("Ri")
+
+    if atmosphere_type == 0:
+        trade_codes.append("Va")
+
+    if hydrographic_percentage == 10:
+        trade_codes.append("Wa")
+
+    return trade_codes
+
+
+def calculate_travel_code(atmosphere, government_type, law_level):
+    if atmosphere >= 10:
+        return "A"
+    if government_type in [0, 7, 10]:
+        return "A"
+    if law_level in [0, 9]:
+        return "A"
+    return "U"
+
+
 class World(object):
     def __init__(self, manual=None, size=None, starport_quality=None, atmosphere_type=None, temperature=None,
                  hydrographic_percentage=None, population=None, government_type=None,
@@ -266,13 +349,19 @@ class World(object):
                                                        self.hydrographic_percentage, self.population,
                                                        self.government_type)
             self.list_of_bases = calculate_list_of_bases(self.starport_quality)
-            self.trade_codes = []
-            self.travel_code = ""
+            self.trade_codes = calculate_trade_codes(self.size, self.atmosphere_type, self.hydrographic_percentage,
+                                                     self.population, self.government_type, self.law_level,
+                                                     self.tech_level)
+            self.travel_code = calculate_travel_code(self.atmosphere_type, self.government_type, self.law_level)
 
     def __str__(self):
         string_list_of_bases = ""
         for i in range(len(self.list_of_bases)):
             string_list_of_bases += self.list_of_bases[i] + " "
+
+        string_trade_codes = ""
+        for i in range(len(self.trade_codes)):
+            string_trade_codes += self.trade_codes[i] + " "
 
         return "\nSize: " + str(self.size) \
                + "\nAtmosphere Type: " + str(self.atmosphere_type) \
@@ -282,9 +371,10 @@ class World(object):
                + "\nGovernment Type: " + str(self.government_type) \
                + "\nLaw Level: " + str(self.law_level) \
                + "\nTech Level: " + str(self.tech_level) \
-               + "\nTrade Codes: " + "NOT IMPLEMENTED YET" \
+               + "\nTrade Codes: " + string_trade_codes \
                + "\nStarport Quality: " + self.starport_quality \
-               + "\nBases: " + string_list_of_bases
+               + "\nBases: " + string_list_of_bases \
+               + "\nTravel Code: " + self.travel_code
 
 # temp testing code
 x = World()
