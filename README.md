@@ -31,3 +31,7 @@ Starport Quality: C
 Bases: pirate
 
 Travel Code: A
+
+
+
+CalcAvailablePassengers.py - a python program that calculates available passangers given several command line options. has a requirements file.
