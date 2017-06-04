@@ -156,69 +156,69 @@ def calculate_list_of_bases(starport_quality):
     if starport_quality in "A":
         roll = roll_dice(2, 6)
         if roll >= 8:
-            list_of_bases.append("naval")
+            list_of_bases.append("Naval")
         roll = roll_dice(2, 6)
         if roll >= 10:
-            list_of_bases.append("scout")
+            list_of_bases.append("Scout")
         roll = roll_dice(2, 6)
         if roll >= 8:
-            list_of_bases.append("research")
+            list_of_bases.append("Research")
         roll = roll_dice(2, 6)
         if roll >= 4:
-            list_of_bases.append("tas")
+            list_of_bases.append("Tas")
         roll = roll_dice(2, 6)
         if roll >= 6:
-            list_of_bases.append("imperial_consulate")
+            list_of_bases.append("Imperial_consulate")
 
     if starport_quality in "B":
         roll = roll_dice(2, 6)
         if roll >= 8:
-            list_of_bases.append("naval")
+            list_of_bases.append("Naval")
         roll = roll_dice(2, 6)
         if roll >= 8:
-            list_of_bases.append("scout")
+            list_of_bases.append("Scout")
         roll = roll_dice(2, 6)
         if roll >= 10:
-            list_of_bases.append("research")
+            list_of_bases.append("Research")
         roll = roll_dice(2, 6)
         if roll >= 6:
-            list_of_bases.append("tas")
+            list_of_bases.append("Tas")
         roll = roll_dice(2, 6)
         if roll >= 8:
-            list_of_bases.append("imperial_consulate")
+            list_of_bases.append("Imperial_consulate")
         roll = roll_dice(2, 6)
         if roll >= 12:
-            list_of_bases.append("pirate")
+            list_of_bases.append("Pirate")
 
     if starport_quality in "C":
         roll = roll_dice(2, 6)
         if roll >= 8:
-            list_of_bases.append("scout")
+            list_of_bases.append("Scout")
         roll = roll_dice(2, 6)
         if roll >= 10:
-            list_of_bases.append("research")
+            list_of_bases.append("Research")
         roll = roll_dice(2, 6)
         if roll >= 10:
-            list_of_bases.append("tas")
+            list_of_bases.append("Tas")
         roll = roll_dice(2, 6)
         if roll >= 10:
-            list_of_bases.append("imperial_consulate")
+            list_of_bases.append("Imperial_consulate")
         roll = roll_dice(2, 6)
         if roll >= 10:
-            list_of_bases.append("pirate")
+            list_of_bases.append("Pirate")
 
     if starport_quality in "D":
         roll = roll_dice(2, 6)
         if roll >= 7:
-            list_of_bases.append("scout")
+            list_of_bases.append("Scout")
         roll = roll_dice(2, 6)
         if roll >= 12:
-            list_of_bases.append("pirate")
+            list_of_bases.append("Pirate")
 
     if starport_quality in "E":
         roll = roll_dice(2, 6)
         if roll >= 12:
-            list_of_bases.append("pirate")
+            list_of_bases.append("Pirate")
     if starport_quality in "X":
         list_of_bases.append("")
 
@@ -309,11 +309,16 @@ def calculate_travel_code(atmosphere, government_type, law_level):
 
 
 class World(object):
+    """
+    this is for creating auto generated worlds. You can overload the default for exact values.
+    """
     def __init__(self, manual=None, size=None, starport_quality=None, atmosphere_type=None, temperature=None,
                  hydrographic_percentage=None, population=None, government_type=None,
                  law_level=None, tech_level=None, list_of_bases=None, trade_codes=None,
-                 travel_code=None):
+                 travel_code=None, location=None, name=None):
         if manual is not None:
+            self.name = name
+            self.location = location
             self.size = size
             self.starport_quality = starport_quality
             self.atmosphere_type = atmosphere_type
@@ -326,7 +331,9 @@ class World(object):
             self.list_of_bases = list_of_bases
             self.trade_codes = trade_codes
             self.travel_code = travel_code
-        else:  # random generated world
+        else:  # random generated worlds
+            self.name = "N/A"
+            self.location = 0
             self.size = roll_dice(1, 10, 0, "size")
             self.starport_quality = calculate_starport_quality()  # could make this it's own object?
             self.atmosphere_type = check_bounded_value(roll_dice(2, 6, -7, "atmosphere") + self.size, 0, 10)
@@ -376,9 +383,31 @@ class World(object):
                + "\nBases: " + string_list_of_bases \
                + "\nTravel Code: " + self.travel_code
 
+    def special_format(self):
+        ret_val = ""
+        string_list_of_bases = ""
+        if True:
+            print("===" + str(len(self.list_of_bases)))
+        for i in range(len(self.list_of_bases)):
+
+            string_list_of_bases += self.list_of_bases[i][0] + " "
+
+        string_trade_codes = ""
+        for i in range(len(self.trade_codes)):
+            string_trade_codes += self.trade_codes[i] + " "
+
+        ret_val += str(self.name) + " " + str(self.location).zfill(4) + " " + str(self.starport_quality) + str(self.size) + \
+                   str(self.atmosphere_type) + str(self.hydrographic_percentage) + str(self.population) + \
+                   str(self.government_type) + str(self.law_level) + "=" + str(self.tech_level) + " " + \
+                   string_list_of_bases + string_trade_codes
+
+        return ret_val
+
 # temp testing code
 x = World()
 print(x)
-
+x.name = "Omicron"
+x.location = 100
+print("\n\n\n" + x.special_format())
 # print(str(temperature_dice_modifier(11, True)))
 #
